@@ -9,5 +9,5 @@
 class Window {
 
 public:
-	bool showWindow(std::uint8_t frame_data[], Video* video_context);
+	bool showVideo(Video* video);
 };
