@@ -14,6 +14,5 @@ endif()
 
 project ("MediaServer" VERSION 0.1.0 LANGUAGES C CXX)
 
-
 # Include sub-projects.
-add_subdirectory ("Server")
+add_subdirectory ("Player")

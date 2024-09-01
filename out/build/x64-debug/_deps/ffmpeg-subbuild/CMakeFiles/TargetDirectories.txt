@@ -1,0 +1,3 @@
+C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/CMakeFiles/ffmpeg-populate.dir
+C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/CMakeFiles/edit_cache.dir
+C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/CMakeFiles/rebuild_cache.dir

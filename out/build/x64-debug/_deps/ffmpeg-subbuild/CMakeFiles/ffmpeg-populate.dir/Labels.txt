@@ -1,0 +1,14 @@
+# Target labels
+ ffmpeg-populate
+# Source files and their labels
+C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/CMakeFiles/ffmpeg-populate
+C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/CMakeFiles/ffmpeg-populate.rule
+C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/CMakeFiles/ffmpeg-populate-complete.rule
+C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-build.rule
+C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-configure.rule
+C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-download.rule
+C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-install.rule
+C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-mkdir.rule
+C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-patch.rule
+C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-test.rule
+C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-update.rule

@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/CMakeFiles/ffmpeg-populate"
+		},
+		{
+			"file" : "C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/CMakeFiles/ffmpeg-populate.rule"
+		},
+		{
+			"file" : "C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/CMakeFiles/ffmpeg-populate-complete.rule"
+		},
+		{
+			"file" : "C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-build.rule"
+		},
+		{
+			"file" : "C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-configure.rule"
+		},
+		{
+			"file" : "C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-download.rule"
+		},
+		{
+			"file" : "C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-install.rule"
+		},
+		{
+			"file" : "C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-mkdir.rule"
+		},
+		{
+			"file" : "C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-patch.rule"
+		},
+		{
+			"file" : "C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-test.rule"
+		},
+		{
+			"file" : "C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"ffmpeg-populate"
+		],
+		"name" : "ffmpeg-populate"
+	}
+}

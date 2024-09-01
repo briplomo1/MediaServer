@@ -1,0 +1,21 @@
+# ninja log v5
+1	39	7465818992282759	ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-mkdir	cef5f970fd3eccb8
+8432	8466	7465819076556135	ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-install	335ca3e48dc9b676
+1	39	7465818992282759	C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-mkdir	cef5f970fd3eccb8
+8294	8329	7465819075190074	C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-update	3327b11998b621e7
+39	8283	7465819074725440	ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-download	33ef230dd36d2433
+39	8283	7465819074725440	C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-download	33ef230dd36d2433
+8294	8329	7465819075190074	ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-update	3327b11998b621e7
+8329	8364	7465819075533916	ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-patch	c37cd36279583e9c
+8329	8364	7465819075533916	C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-patch	c37cd36279583e9c
+8364	8397	7465819075865325	ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-configure	5d911222aa97cf12
+8364	8397	7465819075865325	C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-configure	5d911222aa97cf12
+8397	8432	7465819076216201	ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-build	3689e46275028c6f
+8397	8432	7465819076216201	C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-build	3689e46275028c6f
+8432	8466	7465819076556135	C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-install	335ca3e48dc9b676
+8466	8500	7465819076892019	ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-test	bc5f81def440daf
+8466	8500	7465819076892019	C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-test	bc5f81def440daf
+8500	8547	7465819077366887	CMakeFiles/ffmpeg-populate-complete	edb5c2f6f1eec339
+8500	8547	7465819077366887	ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-done	edb5c2f6f1eec339
+8500	8547	7465819077366887	C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/CMakeFiles/ffmpeg-populate-complete	edb5c2f6f1eec339
+8500	8547	7465819077366887	C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-done	edb5c2f6f1eec339
