@@ -13,7 +13,7 @@ find_package( OpenGL REQUIRED )
 
 include_directories(${OPENGL_INCLUDE_DIRS})
 
-add_executable (Player "Player.cpp" "Player.h" "Window.cpp" "VideoPlayer.cpp" "VideoPlayer.h" "Window.h" "Video.cpp" "Video.h" )
+add_executable (Player "Player.cpp" "Player.h" "Window.cpp" "VideoPlayer.cpp" "VideoPlayer.h" "Window.h" "Video.cpp" "Video.h"  "DoubleBuffer.cpp" "DoubleBuffer.h")
 
 FetchContent_Declare(
 	glfw

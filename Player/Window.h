@@ -17,6 +17,6 @@ public:
 
 public:
 	bool showVideo(Video* video);
-private:
+
 	bool init_window();
 };

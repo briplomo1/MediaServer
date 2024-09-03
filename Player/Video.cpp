@@ -3,41 +3,46 @@
 
 Video::Video(const std::string& file)
 	: file_path(file), audio_stream_index(-1), video_stream_index(-1),
-	video_frame_height(0), video_frame_width(0), frame_count(0), bit_depth(0),
-	fps(0), sps(0), duration(0), buffer(nullptr), rgba_frame_size(0), tot_frames(0){};
+	video_frame_height(0), video_frame_width(0), bit_depth(0),
+	fps(0), sps(0), duration(0), rgba_frame_size(0), tot_frames(0),
+	curr_frame(new std::vector<uint8_t>){};
 
-void Video::start() {
 
-	if (!set_context()) {
-		throw std::exception("Unable to initiate resources necessary to play video!");
-	};
-	if (!set_codecs()) {
-		throw std::exception("Unable to set necessary codecs to play video!");
-	};
+bool Video::do_nothing(std::uint8_t* ch) {
+	return true;
+}
 
-	auto get_f = Video::get_video_frame;
-	auto lambda = [&get_f](
-		std::queue<std::vector<std::uint8_t>>* buff, decltype(max_buffer_size) b_size, int f_size,
-		std::mutex& b_mutex) {
-		
-			for (;;) {
-				b_mutex.lock();
-				if (buff->size() < max_buffer_size) {
-					std::vector<std::uint8_t> frame(f_size);
-					if (!(get_f)(&frame)) {
-						return;
-					}
-					buff->push(frame);
-				}
-				b_mutex.unlock();
+void Video::set_frame(std::vector<std::uint8_t>* frame, 
+	std::mutex& m, std::shared_ptr<buff> r_buff, std::shared_ptr<buff> w_buff, double fps) {
+
+	int fps_ms = (1 / fps) * 1000;
+	const auto interval = std::chrono::milliseconds(fps_ms);
+	while (1) {
+		std::cout << "read in read ----------------------------------------------------------------- " << r_buff << std::endl;
+		// If queue is empty, swap buffers. If both buffers empty throw error!
+		if (r_buff->empty()) {
+			m.lock();
+			std::cout << "Swap: "<< r_buff << std::endl;
+			w_buff.swap(r_buff);
+			std::cout << r_buff->size() << std::endl;
+			if (r_buff->empty()) {
+				std::cout << "Both buffers are empty! Unable to read any data!" << std::endl;
+				std::this_thread::sleep_for(std::chrono::milliseconds(5));
 			}
-		};
-	// Fill buffer in seperate thread and use a mutex to control buffer access.
-	std::jthread load_video_T = std::jthread(lambda, &Video::get_video_frame, buffer, max_buffer_size, rgba_frame_size, std::ref(buffer_mutex));
+			std::cout << r_buff->size() << std::endl;
+			std::cout << "After swap: " << r_buff  << "new budd size: " << r_buff->size() << std::endl;
+			m.unlock();
+		}
+		else {
+			// Get next frame and remove from queue
+			*frame = r_buff->front();
+			r_buff->pop();
+			std::cout << r_buff->size() << std::endl;
+			std::this_thread::sleep_for(interval);
+		}
+	}
+	return;
 
-	 std::cout << "Closing video..." << std::endl;
-	 return;
-	 
 }
 
 bool Video::set_context() {
@@ -52,31 +57,7 @@ bool Video::set_context() {
 		std::cout << "Could not open video file! Check path and file type." << std::endl;
 		return false;
 	}
-	// Allocate a frame to hold video datpulled from packet
-	video_frame = av_frame_alloc();
-	if (!video_frame) {
-		std::cout << "Could not allocate video frame!" << std::endl;
-		return false;
-	}
-	// Allocate a packet to hold video data
-	video_packet = av_packet_alloc();
-	if (!video_packet) {
-		std::cout << "Could not allocate video packet!" << std::endl;
-		return false;
-	}
-
-	audio_frame = av_frame_alloc();
-	if (!audio_frame) {
-		std::cout << "Could not allocate audio frame!" << std::endl;
-		return false;
-	}
-
-	audio_packet = av_packet_alloc();
-	if (!audio_packet) {
-		std::cout << "Could not allocate audio packet!" << std::endl;
-		return false;
-	}
-
+	return true;
 }
 
 bool Video::set_codecs() {
@@ -89,7 +70,7 @@ bool Video::set_codecs() {
 	
 
 	// Iterate through streams in context to get indexes of video and audio streams
-	for (int i = 0; i < av_format_context->nb_streams; ++i) {
+	for (unsigned int i = 0; i < av_format_context->nb_streams; ++i) {
 		// Get codec params from stream
 		auto stream = av_format_context->streams[i];
 		auto codec_params = stream->codecpar;
@@ -176,64 +157,88 @@ bool Video::set_codecs() {
 	return true;
 }
 
-bool Video::get_video_frame(std::queue<std::vector<std::uint8_t>>* buffer, decltype(rgba_frame_size) frame_size) {
+bool Video::populate_buffer(Video* this_vid, std::shared_ptr<buff> write_buffer) {
+	std::mutex& m = this_vid->buffer_mutex;
+	auto sz = this_vid->buffer_size;
+	
+	// Allocate a frame to hold encoded video data pulled from packet
+	AVFrame* v_frame = av_frame_alloc();
+	if (!v_frame) {
+		std::cout << "Could not allocate video frame!" << std::endl;
+		return false;
+	}
 
-	// Packet may contain several frames
-	while (av_read_frame(av_format_context, video_packet) >= 0) {
+	// Video packet holds compressed frames
+	// Typically video packet holds one compressed frame
+	AVPacket* v_pckt = av_packet_alloc();
+	if (!v_pckt) {
+		std::cout << "Could not allocate video packet!" << std::endl;
+		return false;
+	}
 
-		int stream_index = video_packet->stream_index;
-		// Filter out packets that arent video packets
-		if (stream_index == video_stream_index) {
-			
-			// Decode video packet with video codec
-			// Send packet to decoder
-			int response = avcodec_send_packet(video_codec_context, video_packet);
-		
-			if (response < 0) {
-				std::cout << "Failed to decode video packet!" << std::endl;
+	// lambda checks buffer is not full while blocking with mutex to ensure size is reliable
+	auto buff_is_full = [&write_buffer, &m, sz]() {
+		m.lock();
+		std::cout << "Buff: " << write_buffer << std::endl;
+		bool full = !(write_buffer->size() < sz);
+		m.unlock();
+		return full;
+		};
+
+	for (;;) {
+		//std::cout << "write" << std::endl;
+		// If the buffer is not full. Add frames to buffer
+		//std::cout << "write in write " << write_buffer << std::endl;
+		if (!buff_is_full()) {
+			if (!(av_read_frame(this_vid->av_format_context, v_pckt) >= 0)) {
+				std::cout << "Could not read packet!" << std::endl;
 				return false;
 			}
-			video_frame->pts = frame_count++;
-			// Receive frame from decoder and put it in our frame
-			response = avcodec_receive_frame(video_codec_context, video_frame);
-			if (response == AVERROR(EAGAIN)) {
-				continue;
+			// Found a video packet. Decode and push frame into buffer
+			if (v_pckt->stream_index == this_vid->video_stream_index) {
+				
+				// Decode video packet with codec
+				int res = avcodec_send_packet(this_vid->video_codec_context, v_pckt);
+				if (res < 0) {
+					std::cout << "Failed to decode video packet!" << std::endl;
+					return false;
+				}
+				// Receive frame from decoder and put it in our frame
+				res = avcodec_receive_frame(video_codec_context, v_frame);
+				if (res == AVERROR(EAGAIN)) {
+					continue;
+				}
+				if (res == AVERROR_EOF) {
+					std::cout << "End of video!" << std::endl;
+					return false;
+				}
+				else if (res < 0) {
+					std::cout << "Failed to decode packet!" << std::endl;
+					return false;
+				}
+				// Create vector to hold a single frames data transformewd to rgba format
+				std::vector<std::uint8_t> frame_data(this_vid->rgba_frame_size);
+				// Reshape frame data into rgba
+				if (!this_vid->scale_frame_data(&frame_data, v_frame)) {
+					std::cout << "Unable to transform/scale frame!" << std::endl;
+					return false;
+				}
+				m.lock();
+				write_buffer->push(frame_data);
+				m.unlock();
+				av_packet_unref(v_pckt);
 			}
-			if (response == AVERROR_EOF) {
-			std::cout << "End of video!" << std::endl;
-			return false;
-			}
-			
-			else if (response < 0) {
-				std::cout << "Failed to decode packet!" << std::endl;
-				return false;
-			}
-			std::vector<std::uint8_t> rgba_frame(frame_size);
-			// Frame reformated into rgba frame. 4 bytes per pixel * total pixels is one rgba frame
-			if (!scale_frame_data(&rgba_frame)) {
-				std::cout << "Unable to transform/scale frame!" << std::endl;
-				return false;
-			}
-			buffer->push(rgba_frame);
-			
-			av_packet_unref(video_packet);
-		
-		}
-		else if (stream_index == audio_stream_index) {
-			// Handle audio packet
-			continue;
-		}
-		else {
-			// Handle unkown stream packet
-			continue;
+
+		} else{
+			std::cout << "full" << std::endl;
 		}
 		
 	}
-	
+	std::cout << "Ending video..." << std::endl;
 	return true;
 }
 
-bool Video::scale_frame_data(std::vector<std::uint8_t>* data_out) {
+bool Video::scale_frame_data(std::vector<std::uint8_t>* data_out, AVFrame* frame) {
 	// Scaling context to transform  or scale data  in this case from YUV to RBGA.
 	// Initialize if it has not already. Cannot be intialized prior as it needs data from a frame.
 	// May be slow and will need to move to using hardware acceleration with GPU
@@ -252,16 +257,34 @@ bool Video::scale_frame_data(std::vector<std::uint8_t>* data_out) {
 	// Vector to describe line size of the data
 	int line_sizes[4] = { video_frame_width * 4, 0, 0, 0 };
 	// Scale / reformat data into RGBA data buffer
-	sws_scale(scaler_context, video_frame->data, video_frame->linesize, 0, video_frame->height, dest_buffer.data(), line_sizes);
+	sws_scale(scaler_context, frame->data, frame->linesize, 0, frame->height, dest_buffer.data(), line_sizes);
 	return true;
 }
 
+void Video::start() {
+
+	if (!set_context()) {
+		throw std::exception("Unable to initiate resources necessary to play video!");
+	};
+	if (!set_codecs()) {
+		throw std::exception("Unable to set necessary codecs to play video!");
+	};
+
+	// Define memb funcs to pasws to threads
+	bool(Video:: * p_buff)(Video*, std::shared_ptr<buff>) = &Video::populate_buffer;
+	void(Video:: * set_f)(std::vector<std::uint8_t>*, std::mutex&,
+		std::shared_ptr<buff>, std::shared_ptr<buff>, double) = &Video::set_frame;
+
+	// Init thread to decode and load frames into buffer.
+	std::jthread write(p_buff, this, this, write_buff);
+	// Init thread to populate current frame dynamically at the frame rate using timer.
+	std::jthread read(set_f, this, curr_frame, std::ref(buffer_mutex), read_buff, write_buff, fps);
+
+	std::cout << "Closing video...----------------------------------------------------" << std::endl;
+	return;
+}
+
 void Video::free_context() {
-	// Free packets and frames
-	av_frame_free(&video_frame);
-	av_packet_free(&video_packet);
-	av_frame_free(&audio_frame);
-	av_packet_free(&audio_packet);
 	// Close file
 	avformat_close_input(&av_format_context);
 	// Free contexts

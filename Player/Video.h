@@ -6,6 +6,7 @@ extern "C" {
 #include <libavutil/frame.h>
 #include <libswscale/swscale.h>
 }
+
 #include <string>
 #include <vector>
 #include <array>
@@ -14,16 +15,19 @@ extern "C" {
 #include <functional>
 #include <mutex>
 #include <queue>
+#include <chrono>
+#include <memory>
+
+using buff = std::queue<std::vector<std::uint8_t>>;
 
 class Video {
 
 public:
-
-	
-	// Frame buffer holds decoded frames ready to be displayed
-	std::queue<std::vector<std::uint8_t>>* buffer;
+	// The frame which should currently be displayed as specified by fps
+	// Frame is dynamically updated to always display the frame that should currently be displayed.
+	std::vector<std::uint8_t>* curr_frame;
 	// Buffer size
-	static const decltype(buffer->size()) max_buffer_size = 256;
+	static const size_t buffer_size = 256;
 	// Current index of buffer
 	// Size of rbga pixel values array after conversion from yuv
 	int rgba_frame_size;
@@ -42,22 +46,13 @@ public:
 	std::int64_t tot_frames;
 
 private:
-	// Mutex to manage buffer IO
+	// Define dual buffers which get swapped
+	volatile std::shared_ptr<buff> read_buff = std::make_shared<buff>();
+	volatile std::shared_ptr<buff> write_buff = std::make_shared<buff>();
+	// Mutex to manage buffer access
 	std::mutex buffer_mutex;
-	// Counter for video frames
-	int frame_count;
 	// Path of valid video file to be played
 	std::string file_path;
-	// Allocated video frame data
-	AVFrame* video_frame = nullptr;
-	// Allcated audio frame
-	AVFrame* audio_frame = nullptr;
-	// Video packet holds compressed frames
-	// Typically video packet holds one compressed frame
-	AVPacket* video_packet = nullptr;
-	// Audio packet holds compressed audio frames
-	// One packet contains several frames depending on the formattting
-	AVPacket* audio_packet = nullptr;
 	// Index of the video stream from available streams in file header
 	int video_stream_index;
 	// Index of the audio stream from available streams in file header
@@ -77,18 +72,22 @@ public:
 	Video(const std::string& file);
 	// Starts populating buffer with frames and returns pointer to buffer
 	void start();
-	// Read and decode a single frame of the video
-	bool get_video_frame(std::queue<std::vector<std::uint8_t>>* buff, decltype(rgba_frame_size) frame_size);
 	// Video destructor will deallocate resources by free_context
 	~Video();
 	
 private:
+	bool do_nothing(std::uint8_t* ch);
 	// Allocate contexts necessary to define file properties and read file
 	bool set_context();
 	// Find and set a/v codec contexts and scaler if possible
 	bool set_codecs();
-	// Scale/transform pixel data of video frame into the displays expected format
-	bool scale_frame_data(std::vector<std::uint8_t>* data_out);
-	// Free resources allocated in set_context
+	// Decode frames of video and populate given buffer until buffer is full or video ends
+	bool populate_buffer(Video* video, std::shared_ptr<buff> write_buffer);
+	// Set current frame to be displayed. Frame is set using a timer, the fps, and the frames' timstamps.
+	void set_frame(std::vector<std::uint8_t>* frame, std::mutex& buffer_mutex,
+		std::shared_ptr<buff> read_buff, std::shared_ptr<buff> write_buff, double fps);
+	// Scale/transform pixel data of video frame into the displays expected format.
+	bool scale_frame_data(std::vector<std::uint8_t>* data_out, AVFrame* frame);
+	// Free resources allocated in set_context.
 	void free_context();
 };

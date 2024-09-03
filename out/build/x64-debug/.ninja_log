@@ -10,7 +10,7 @@
 26	365	7465819662541994	_deps/glfw-build/src/CMakeFiles/glfw.dir/osmesa_context.c.obj	a359dd81f08bacc1
 5	396	7465819662836352	_deps/glfw-build/src/CMakeFiles/glfw.dir/context.c.obj	5f81d0a5d5e4bc7a
 58	380	7465819662665903	_deps/glfw-build/src/CMakeFiles/glfw.dir/wgl_context.c.obj	e95ca5dbaaaa34c6
-17	618	7469150592689400	Player/CMakeFiles/Player.dir/VideoPlayer.cpp.obj	f23f2d5ca94477c
+18	1449	7470949940331253	Player/CMakeFiles/Player.dir/VideoPlayer.cpp.obj	f23f2d5ca94477c
 21	389	7465819662751118	_deps/glfw-build/src/CMakeFiles/glfw.dir/window.c.obj	621f7a905ce54b07
 47	389	7465819662710970	_deps/glfw-build/src/CMakeFiles/glfw.dir/win32_init.c.obj	6ab84c1bf91e2206
 20	920	7469089964004739	Server/CMakeFiles/Server.dir/Video.cpp.obj	77e05eb7deafd981
@@ -18,7 +18,7 @@
 18	392	7465819662781098	_deps/glfw-build/src/CMakeFiles/glfw.dir/vulkan.c.obj	a92c5652bcba77d2
 12	393	7465819662791096	_deps/glfw-build/src/CMakeFiles/glfw.dir/monitor.c.obj	348853e0a7c3653c
 42	393	7465819662791096	_deps/glfw-build/src/CMakeFiles/glfw.dir/win32_time.c.obj	84238c76a1252775
-12	607	7469156675563968	Player/CMakeFiles/Player.dir/Video.cpp.obj	34c18e627b461777
+13	1296	7470952788611569	Player/CMakeFiles/Player.dir/Video.cpp.obj	34c18e627b461777
 8	395	7465819662836352	_deps/glfw-build/src/CMakeFiles/glfw.dir/init.c.obj	99012cd0c936dc13
 24	400	7465819662896348	_deps/glfw-build/src/CMakeFiles/glfw.dir/egl_context.c.obj	75b93fcaf16b8f0e
 53	400	7465819662896348	_deps/glfw-build/src/CMakeFiles/glfw.dir/win32_monitor.c.obj	840203abb087a5e7
@@ -28,9 +28,10 @@
 11	909	7469089963899607	Server/CMakeFiles/Server.dir/Server.cpp.obj	2f9dd9789f4df96c
 14	926	7469089964074863	Server/CMakeFiles/Server.dir/Window.cpp.obj	165d191d2dcb7f76
 17	905	7469089963864554	Server/CMakeFiles/Server.dir/VideoPlayer.cpp.obj	efb0b11c8f5a7993
-14	632	7469150592829372	Player/CMakeFiles/Player.dir/Window.cpp.obj	3b4734135eb7bb86
-11	629	7469150592799401	Player/CMakeFiles/Player.dir/Player.cpp.obj	c32e3e140dc04eb1
-607	1370	7469156676447470	Player/Player.exe	768975bab52a189a
-26	1015	7469231826621429	Player/CMakeFiles/Player.dir/VideoPlayer.cpp.obj	f23f2d5ca94477c
-20	1017	7469231826631505	Player/CMakeFiles/Player.dir/Player.cpp.obj	c32e3e140dc04eb1
-10	748	7469232040676073	Player/CMakeFiles/Player.dir/Window.cpp.obj	3b4734135eb7bb86
+15	1466	7470949940511225	Player/CMakeFiles/Player.dir/Window.cpp.obj	3b4734135eb7bb86
+12	1458	7470949940431244	Player/CMakeFiles/Player.dir/Player.cpp.obj	c32e3e140dc04eb1
+1296	1977	7470952789606515	Player/Player.exe	e538b27f433c9c72
+7	313	7470850780531965	Player/CMakeFiles/Player.dir/DoubleBuffer.cpp.obj	10670e36d86c4347
+13	1198	7470956918099729	Player/CMakeFiles/Player.dir/Player.cpp.obj	c32e3e140dc04eb1
+17	1211	7470956918235307	Player/CMakeFiles/Player.dir/Window.cpp.obj	3b4734135eb7bb86
+19	1213	7470956918265357	Player/CMakeFiles/Player.dir/VideoPlayer.cpp.obj	f23f2d5ca94477c

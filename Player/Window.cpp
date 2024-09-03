@@ -1,7 +1,6 @@
 #include "Window.h"
 
 
-
 bool Window::init_window() {
 	if (!glfwInit()) {
 		std::cout << "Unable to init glfw!" << std::endl;
@@ -33,23 +32,24 @@ bool Window::init_window() {
 	glLoadIdentity();
 	glOrtho(0, window_width, window_height, 0, -1, 1);
 	glMatrixMode(GL_MODELVIEW);
-
+	return true;
 }
 
 bool Window::showVideo(Video* video) {
 	// Start loading frames
 	video->start();
+	std::cout << "start" << std::endl;
 	// Set window properties and show window
 	while (!glfwWindowShouldClose(window)) {
 
 		// Get next frame in buffer
-		std::vector<std::uint8_t> rgba_frame = (video->buffer)->front();
+		std::vector<std::uint8_t>* rgba_frame = video->curr_frame;
 
 		// Display 2D video with RGBA frame and video dimensions
 		glBindTexture(GL_TEXTURE_2D, textures);
 		// Populate texture data
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, video->video_frame_width, video->video_frame_height,
-			0, GL_RGBA, GL_UNSIGNED_BYTE, (rgba_frame).data());
+			0, GL_RGBA, GL_UNSIGNED_BYTE, (*rgba_frame).data());
 
 		glEnable(GL_TEXTURE_2D);
 		glBegin(GL_QUADS);
@@ -61,8 +61,7 @@ bool Window::showVideo(Video* video) {
 
 		glEnd();
 		glDisable(GL_TEXTURE_2D);
-		// Pop frame from buffer
-		video->buffer->pop();
+		
 		// Swap window buffers
 		glfwSwapBuffers(window);
 		glfwPollEvents();

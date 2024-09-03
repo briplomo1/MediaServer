@@ -109,6 +109,14 @@ build Player\CMakeFiles\Player.dir\Video.cpp.obj: CXX_COMPILER__Player_unscanned
   TARGET_COMPILE_PDB = Player\CMakeFiles\Player.dir\
   TARGET_PDB = Player\Player.pdb
 
+build Player\CMakeFiles\Player.dir\DoubleBuffer.cpp.obj: CXX_COMPILER__Player_unscanned_Debug C$:\Users\bripl\source\repos\MediaServer\Player\DoubleBuffer.cpp || cmake_object_order_depends_target_Player
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -std:c++20 -ZI
+  INCLUDES = -IC:\Users\bripl\source\repos\MediaServer\out\build\x64-debug\_deps\ffmpeg-src\include -IC:\Users\bripl\source\repos\MediaServer\out\build\x64-debug\_deps\glfw-src\include
+  OBJECT_DIR = Player\CMakeFiles\Player.dir
+  OBJECT_FILE_DIR = Player\CMakeFiles\Player.dir
+  TARGET_COMPILE_PDB = Player\CMakeFiles\Player.dir\
+  TARGET_PDB = Player\Player.pdb
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Player
@@ -117,7 +125,7 @@ build Player\CMakeFiles\Player.dir\Video.cpp.obj: CXX_COMPILER__Player_unscanned
 #############################################
 # Link the executable Player\Player.exe
 
-build Player\Player.exe: CXX_EXECUTABLE_LINKER__Player_Debug Player\CMakeFiles\Player.dir\Player.cpp.obj Player\CMakeFiles\Player.dir\Window.cpp.obj Player\CMakeFiles\Player.dir\VideoPlayer.cpp.obj Player\CMakeFiles\Player.dir\Video.cpp.obj | _deps\glfw-build\src\glfw3.lib || _deps\glfw-build\src\glfw3.lib
+build Player\Player.exe: CXX_EXECUTABLE_LINKER__Player_Debug Player\CMakeFiles\Player.dir\Player.cpp.obj Player\CMakeFiles\Player.dir\Window.cpp.obj Player\CMakeFiles\Player.dir\VideoPlayer.cpp.obj Player\CMakeFiles\Player.dir\Video.cpp.obj Player\CMakeFiles\Player.dir\DoubleBuffer.cpp.obj | _deps\glfw-build\src\glfw3.lib || _deps\glfw-build\src\glfw3.lib
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -ZI
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
   LINK_LIBRARIES = _deps\glfw-build\src\glfw3.lib  opengl32.lib  glu32.lib  avdevice.lib  avformat.lib  avcodec.lib  avutil.lib  swscale.lib  swresample.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
