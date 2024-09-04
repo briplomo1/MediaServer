@@ -76,8 +76,8 @@ private:
 	SwsContext* scaler_context = nullptr;
 	
 public:
-	// For diaply to get current frame to display safely
-	// gets current frame in a thread safe way using frame_mutex
+	// For disply to get current frame to display safely
+	// returns current frame to display while locking threads
 	rgba_frame get_frame();
 	// Constructor initializes video from given video file
 	Video(const string& file);

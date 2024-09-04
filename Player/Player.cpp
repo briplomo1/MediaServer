@@ -6,7 +6,7 @@ int main(int argc, char* argv[]) {
 	//	return 1;
 	//}
 	
-	const string file_path = "C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/Server/VID-20240812-WA0001.mp4";
+	const string file_path = "C:\\Users\\bripl\\source\\repos\\MediaServer\\out\\build\\x64-debug\\Server\\VID-20240812-WA0001.mp4";
 	VideoPlayer video_player;
 	cout << "Playing selected file: " << file_path << endl;
 	video_player.play_video(file_path);

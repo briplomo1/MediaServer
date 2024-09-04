@@ -2,7 +2,9 @@
 # project specific logic here.
 #
 # Add source to this project's executable.
-
+cmake_minimum_required (VERSION 3.8)
+SET(CMAKE_CXX_STANDARD 20)
+SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(FetchContent)
 
@@ -13,7 +15,7 @@ find_package( OpenGL REQUIRED )
 
 include_directories(${OPENGL_INCLUDE_DIRS})
 
-add_executable (Player "Player.cpp"  "Window.cpp" "VideoPlayer.cpp" "VideoPlayer.h" "Window.h" "Video.cpp" "Video.h"  "DoubleBuffer.cpp" "DoubleBuffer.h")
+add_executable (Player "Player.cpp"  "Window.cpp" "VideoPlayer.cpp" "VideoPlayer.h" "Window.h" "Video.cpp" "Video.h"   )
 
 FetchContent_Declare(
 	glfw
@@ -24,7 +26,6 @@ FetchContent_Declare(
 FetchContent_Declare(
 	ffmpeg
 	URL https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full-shared.7z
-	URL_HASH SHA256=a0b6e8c7978b95d019a93dcf4b4ab74b17d9e53e0a87cfd463e1376c5927e30b
 )
 
 FetchContent_GetProperties(glfw)

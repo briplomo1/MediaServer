@@ -281,10 +281,10 @@ void Video::stop() {
 void Video::start() {
 	// Initialize all video props
 	if (!set_context()) {
-		throw exception("Unable to initiate resources necessary to play video!");
+		return;
 	};
 	if (!set_codecs()) {
-		throw exception("Unable to set necessary codecs to play video!");
+		return;
 	};
 
 	// Get stop token from stop source

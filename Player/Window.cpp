@@ -6,7 +6,7 @@ bool Window::init_window() {
 		cout << "Unable to init glfw!" << endl;
 		return false;
 	}
-	// Create window with initial size
+	// Create a desktop window with initial size
 	window = glfwCreateWindow(1600, 1200, "Bryan's Video Player", NULL, NULL);
 	if (!window) {
 		cout << "Unable to open window!" << endl;
@@ -36,7 +36,6 @@ bool Window::init_window() {
 }
 
 bool Window::showVideo(Video* video) {
-
 	
 	// Show window refreshing as fast as possible
 	while (!glfwWindowShouldClose(window)) {
