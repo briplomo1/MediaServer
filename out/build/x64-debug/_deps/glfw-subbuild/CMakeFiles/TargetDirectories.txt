@@ -1,3 +1,0 @@
-C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/glfw-subbuild/CMakeFiles/glfw-populate.dir
-C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/glfw-subbuild/CMakeFiles/edit_cache.dir
-C:/Users/bripl/source/repos/MediaServer/out/build/x64-debug/_deps/glfw-subbuild/CMakeFiles/rebuild_cache.dir
