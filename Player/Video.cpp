@@ -15,16 +15,13 @@ void Video::set_frame(Video* v, stop_token stoken) {
 	auto frame = v->curr_frame;
 	auto fps = v->fps;
 
-	int frame_count = 0;
-	// The time difference between frames in microseconds
+	// The desired time difference between frames in microseconds
 	long long frame_diff_micros = (1000000 / fps);
-	chrono::system_clock::time_point start = chrono::system_clock::now();
-	chrono::system_clock::time_point last_timestamp = chrono::system_clock::now();
+	chrono::system_clock::time_point last_frame_timestamp = chrono::system_clock::now();
 	const auto interval = chrono::microseconds(frame_diff_micros);
-	cout << "Time: " << frame_diff_micros << " Fps: "<< fps << endl;
 	while (!stoken.stop_requested()) {
 		chrono::system_clock::time_point now = chrono::system_clock::now();
-		chrono::duration elapsed = chrono::duration_cast<chrono::microseconds>(now - last_timestamp);
+		chrono::duration elapsed = chrono::duration_cast<chrono::microseconds>(now - last_frame_timestamp);
 		// If current buffer is empty, swap to second buffer. If both buffers empty wait and buffer!
 		if ((*r_buff)->empty()) {
 			// Perform swapping of buffers while locking buffers
@@ -48,10 +45,7 @@ void Video::set_frame(Video* v, stop_token stoken) {
 			*frame = (*r_buff)->front();
 			v->frame_mutex.unlock();
 			(*r_buff)->pop();
-			last_timestamp = chrono::system_clock::now();
-			frame_count++;
-			double actual_fps = static_cast<double>(frame_count) / chrono::duration_cast<chrono::milliseconds>(now - start).count();
-			cout <<"fps: " << actual_fps << endl;
+			last_frame_timestamp = chrono::system_clock::now();
 		}
 	}
 	return;
@@ -239,9 +233,9 @@ bool Video::populate_buffer(Video* this_vid, stop_token stoken) {
 					cout << "Unable to transform/scale frame!" << endl;
 					return false;
 				}
-				//m.lock();
+				m.lock();
 				(*write_buffer)->push(frame_data);
-				//m.unlock();
+				m.unlock();
 				
 				// Dereference packet for next iteration
 				av_packet_unref(v_pckt);
