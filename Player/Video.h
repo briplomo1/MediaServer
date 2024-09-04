@@ -18,14 +18,17 @@ extern "C" {
 #include <chrono>
 #include <memory>
 
-using buff = std::queue<std::vector<std::uint8_t>>;
+using namespace std;
+using buff = queue<vector<uint8_t>>*;
+using rgba_frame = vector<uint8_t>;
+
 
 class Video {
 
 public:
 	// The frame which should currently be displayed as specified by fps
 	// Frame is dynamically updated to always display the frame that should currently be displayed.
-	std::vector<std::uint8_t>* curr_frame;
+	rgba_frame* curr_frame;
 	// Buffer size
 	static const size_t buffer_size = 256;
 	// Current index of buffer
@@ -41,18 +44,24 @@ public:
 	// Audio sample rate
 	double sps;
 	// Audio bit depth/ bits per sample
-	std::int64_t bit_depth;
+	int64_t bit_depth;
 	// Total frames in stream
-	std::int64_t tot_frames;
+	int64_t tot_frames;
 
 private:
+	// A stop source to tell threads to stop
+	stop_source source;
 	// Define dual buffers which get swapped
-	volatile std::shared_ptr<buff> read_buff = std::make_shared<buff>();
-	volatile std::shared_ptr<buff> write_buff = std::make_shared<buff>();
+	buff read_buff =  nullptr;
+	buff write_buff = nullptr;
+	buff* read_buff_ptr = nullptr;
+	buff* write_buff_ptr = nullptr;
 	// Mutex to manage buffer access
-	std::mutex buffer_mutex;
+	mutex buffer_mutex;
+	// Mutex to manage access to the current frame
+	mutex frame_mutex;
 	// Path of valid video file to be played
-	std::string file_path;
+	string file_path;
 	// Index of the video stream from available streams in file header
 	int video_stream_index;
 	// Index of the audio stream from available streams in file header
@@ -66,28 +75,31 @@ private:
 	// Scaling/transfomrative operations to be conducted on video frames
 	SwsContext* scaler_context = nullptr;
 	
-	
 public:
+	// For diaply to get current frame to display safely
+	// gets current frame in a thread safe way using frame_mutex
+	rgba_frame get_frame();
 	// Constructor initializes video from given video file
-	Video(const std::string& file);
-	// Starts populating buffer with frames and returns pointer to buffer
+	Video(const string& file);
+	// Starts populating buffer with frames
 	void start();
+	// Stop threads
+	void stop();
 	// Video destructor will deallocate resources by free_context
 	~Video();
 	
 private:
-	bool do_nothing(std::uint8_t* ch);
+
 	// Allocate contexts necessary to define file properties and read file
 	bool set_context();
 	// Find and set a/v codec contexts and scaler if possible
 	bool set_codecs();
 	// Decode frames of video and populate given buffer until buffer is full or video ends
-	bool populate_buffer(Video* video, std::shared_ptr<buff> write_buffer);
+	bool populate_buffer(Video* video, stop_token);
 	// Set current frame to be displayed. Frame is set using a timer, the fps, and the frames' timstamps.
-	void set_frame(std::vector<std::uint8_t>* frame, std::mutex& buffer_mutex,
-		std::shared_ptr<buff> read_buff, std::shared_ptr<buff> write_buff, double fps);
+	void set_frame(Video* video, stop_token);
 	// Scale/transform pixel data of video frame into the displays expected format.
-	bool scale_frame_data(std::vector<std::uint8_t>* data_out, AVFrame* frame);
+	bool scale_frame_data(rgba_frame* data_out, AVFrame* frame);
 	// Free resources allocated in set_context.
 	void free_context();
 };

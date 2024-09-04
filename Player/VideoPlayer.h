@@ -19,6 +19,6 @@ extern "C" {
 class VideoPlayer {
 
 public:
-	static void play_video(const std::string& file);
+	static void play_video(const string& file);
 
 };

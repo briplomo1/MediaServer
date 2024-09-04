@@ -3,13 +3,13 @@
 
 bool Window::init_window() {
 	if (!glfwInit()) {
-		std::cout << "Unable to init glfw!" << std::endl;
+		cout << "Unable to init glfw!" << endl;
 		return false;
 	}
 	// Create window with initial size
-	window = glfwCreateWindow(1980, 1800, "Hello!", NULL, NULL);
+	window = glfwCreateWindow(1600, 1200, "Bryan's Video Player", NULL, NULL);
 	if (!window) {
-		std::cout << "Unable to open window!" << std::endl;
+		cout << "Unable to open window!" << endl;
 		return false;
 	}
 	// Setup window
@@ -36,21 +36,19 @@ bool Window::init_window() {
 }
 
 bool Window::showVideo(Video* video) {
-	// Start loading frames
-	video->start();
-	std::cout << "start" << std::endl;
-	// Set window properties and show window
+
+	
+	// Show window refreshing as fast as possible
 	while (!glfwWindowShouldClose(window)) {
 
 		// Get next frame in buffer
-		std::vector<std::uint8_t>* rgba_frame = video->curr_frame;
+		rgba_frame rgba_frame = *video->curr_frame;
 
 		// Display 2D video with RGBA frame and video dimensions
 		glBindTexture(GL_TEXTURE_2D, textures);
 		// Populate texture data
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, video->video_frame_width, video->video_frame_height,
-			0, GL_RGBA, GL_UNSIGNED_BYTE, (*rgba_frame).data());
-
+			0, GL_RGBA, GL_UNSIGNED_BYTE, rgba_frame.data());
 		glEnable(GL_TEXTURE_2D);
 		glBegin(GL_QUADS);
 		// Map video to screen
@@ -58,15 +56,16 @@ bool Window::showVideo(Video* video) {
 		glTexCoord2d(1, 0); glVertex2i(200 + video->video_frame_width, 200);
 		glTexCoord2d(1, 1); glVertex2i(200 + video->video_frame_width, 200 + video->video_frame_height);
 		glTexCoord2d(0, 1); glVertex2i(200, 200 + video->video_frame_height);
-
+		// Disable texture
 		glEnd();
 		glDisable(GL_TEXTURE_2D);
 		
 		// Swap window buffers
 		glfwSwapBuffers(window);
+		// Poll for user events
 		glfwPollEvents();
 	}
-
-	std::cout << "Closed video window" << std::endl;
+	cout << "Closed video window" << endl;
+	video->stop();
 	return true;
 }
